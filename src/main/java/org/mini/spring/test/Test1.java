@@ -1,6 +1,7 @@
 package org.mini.spring.test;
 
-import org.mini.spring.ClassPathXmlApplicationContext;
+import org.mini.spring.beans.BeansException;
+import org.mini.spring.context.ClassPathXmlApplicationContext;
 
 /**
  * @Author lijunda
@@ -11,7 +12,13 @@ public class Test1{
 	public static void main( String[] args ){
 
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext( "beans.xml" );
-		AService aservice = (AService )ctx.getBean( "aservice" );
+		AService aservice = null;
+		try{
+			aservice = ( AService )ctx.getBean( "aservice" );
+		}
+		catch( BeansException e ){
+			e.printStackTrace();
+		}
 		aservice.sayHello();
 	}
 

@@ -1,4 +1,4 @@
-package org.mini.spring;
+package org.mini.spring.beans;
 
 /**
  * @Author lijunda
