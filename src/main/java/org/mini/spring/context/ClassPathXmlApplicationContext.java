@@ -1,6 +1,5 @@
 package org.mini.spring.context;
 
-import org.mini.spring.beans.BeanDefinition;
 import org.mini.spring.beans.BeanFactory;
 import org.mini.spring.beans.BeansException;
 import org.mini.spring.beans.SimpleBeanFactory;
@@ -18,14 +17,14 @@ import org.mini.spring.core.Resource;
  * Spring 内部也是如此的，实际上内部的 beanFactory 是 DefaultListableBeanFactory
  */
 
-public class ClassPathXmlApplicationContext implements BeanFactory{
+public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher{
 
-	BeanFactory beanFactory;
+	SimpleBeanFactory beanFactory;
 
 	public ClassPathXmlApplicationContext( String fileName ){
 
 		Resource resource = new ClassPathXmlResource( fileName );
-		BeanFactory beanFactory = new SimpleBeanFactory();
+		SimpleBeanFactory beanFactory = new SimpleBeanFactory();
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader( beanFactory );
 		reader.loadBeanDefinitions( resource );
 		this.beanFactory = beanFactory;
@@ -38,8 +37,32 @@ public class ClassPathXmlApplicationContext implements BeanFactory{
 	}
 
 	@Override
-	public void registerBeanDefinition( BeanDefinition beanDefinition ){
+	public Boolean containsBean( String beanName ){
 
-		this.beanFactory.registerBeanDefinition( beanDefinition );
+		return this.beanFactory.containsBean( beanName );
 	}
+
+	@Override
+	public void publishEvent( ApplicationEvent event ){
+
+	}
+
+	@Override
+	public boolean isSingleton( String name ){
+
+		return false;
+	}
+
+	@Override
+	public boolean isPropertype( String name ){
+
+		return false;
+	}
+
+	@Override
+	public Class<?> getType( String name ){
+
+		return null;
+	}
+
 }

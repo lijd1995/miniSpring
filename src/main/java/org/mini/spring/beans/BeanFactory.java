@@ -9,7 +9,10 @@ package org.mini.spring.beans;
  */
 public interface BeanFactory{
 
-	Object getBean( String beanName ) throws BeansException;
-	void registerBeanDefinition( BeanDefinition beanDefinition );
+	Object getBean( String name ) throws BeansException;
+	Boolean containsBean( String name );
+	boolean isSingleton( String name );
+	boolean isPropertype( String name );
+	Class<?> getType( String name );
 
 }
