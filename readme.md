@@ -83,4 +83,9 @@ Setter 注入是通过 <property> 标签、构造器注入是通过 <constructor
 3. 添加 dependsOn 属性，用于记录 Bean 之间的依赖关系
 4. 添加 ArgumentValues 和 PropertyValues 用户存储 Bean 的构造器注入和 Setter 注入的属性
 
+# 3. 依赖注入：如何给Bean注入值并解决循环依赖问题？
+
+没有必要去理解三级缓存，因为三级缓存不是必要条件，明白这个道理就好。
+就像我一个数组也可以处理，两个数组也可以处理，只需要知道就好。
+
 
