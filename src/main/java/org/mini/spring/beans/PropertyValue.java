@@ -16,7 +16,7 @@ public class PropertyValue{
 		this.value = value;
 	}
 
-	public PropertyValue( Object value, String type, String name ){
+	public PropertyValue(  String type, String name, Object value ){
 
 		this.value = value;
 		this.type = type;
