@@ -22,12 +22,19 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
 	SimpleBeanFactory beanFactory;
 
 	public ClassPathXmlApplicationContext( String fileName ){
+		this( fileName, true );
+	}
+
+	public ClassPathXmlApplicationContext( String fileName, boolean isRefresh ){
 
 		Resource resource = new ClassPathXmlResource( fileName );
 		SimpleBeanFactory beanFactory = new SimpleBeanFactory();
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader( beanFactory );
 		reader.loadBeanDefinitions( resource );
 		this.beanFactory = beanFactory;
+		if( !isRefresh ) {
+			this.beanFactory.refresh();
+		}
 	}
 
 	@Override

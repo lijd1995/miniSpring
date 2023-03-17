@@ -5,6 +5,7 @@ import com.sun.tools.javac.code.Attribute;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,12 +21,68 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 	// 保存 BeanDefinitions 的列表
 	private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 	private List<String> beanDefinitionNames = new ArrayList<>();
+	private final Map<String, Object> earlySingletonObjects = new HashMap<String, Object>(16);
 
 	public SimpleBeanFactory(){
 
 	}
 
-	private Object createBean( BeanDefinition beanDefinition ) {
+	public void refresh(){
+		for( String beanName : beanDefinitionNames ){
+			try{
+				getBean( beanName );
+			}
+			catch( BeansException e ){
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 根据 beanName 获取 Bean，改造后交给父类处理，父类处理单例
+	 * @param beanName
+	 * @return
+	 * @throws BeansException
+	 */
+	public Object getBean( String beanName ) throws BeansException{
+
+		Object singleton = this.getSingleton( beanName );
+
+		if( singleton == null ){
+			// 如果没有实例，先尝试从毛坯实例中获取
+			singleton = this.earlySingletonObjects.get( beanName );
+			if( singleton == null ){
+				BeanDefinition beanDefinition = beanDefinitionMap.get( beanName );
+				singleton = createBean( beanDefinition );
+				this.registerSingleton( beanName, singleton );
+			}
+
+		}
+
+		return singleton;
+	}
+
+	private Object createBean( BeanDefinition beanDefinition ){
+		Class<?> clz = null;
+		// 创建毛坯 bean 实例
+		Object obj = doCreateBean( beanDefinition );
+		// 存放到毛坯实例缓存中
+		this.earlySingletonObjects.put( beanDefinition.getId(), obj );
+
+		try{
+			clz = Class.forName( beanDefinition.getClassName() );
+		}
+		catch( ClassNotFoundException e ){
+			e.printStackTrace();
+		}
+
+		// 补齐 property 的值
+		handleProperties( beanDefinition, clz, obj );
+		return obj;
+	}
+
+	// doCreateBean 创建毛坯实例，仅仅调用构造方法，没有进行属性处理
+	private Object doCreateBean( BeanDefinition beanDefinition ) {
 
 		Class<?> clz = null;
 		Object obj = null;
@@ -36,7 +93,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 			// 处理构造器参数
 			ArgumentValues constructorArgumentValues = beanDefinition.getConstructorArgumentValues();
 			// 如果有参数
-			if( !constructorArgumentValues.isEmpty() ) {
+			if( null != constructorArgumentValues && !constructorArgumentValues.isEmpty() ) {
 				Class<?>[] paramTypes = new Class<?>[ constructorArgumentValues.getArgumentCount() ];
 				Object[] paramValues = new Object[ constructorArgumentValues.getArgumentCount() ];
 				// 对每一个参数，分数据类型分别处理
@@ -75,8 +132,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 			ex.printStackTrace();
 		}
 
-		handleProperties( beanDefinition, clz, obj );
-
+		System.out.println(beanDefinition.getId() + " bean created. " + beanDefinition.getClassName() + " : " + obj.toString());
 		return obj;
 
 	}
@@ -85,7 +141,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 
 		System.out.println("handle properties for bean : " + beanDefinition.getId());
 		PropertyValues propertyValues = beanDefinition.getPropertyValues();
-		if( !propertyValues.isEmpty() ){
+		if( null != propertyValues && !propertyValues.isEmpty() ){
 			for( int i = 0; i < propertyValues.size(); i++ ) {
 				PropertyValue propertyValue = propertyValues.getPropertyValueList().get( i );
 				String type = propertyValue.getType();
@@ -136,33 +192,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 		}
 	}
 
-	/**
-	 * 根据 beanName 获取 Bean，改造后交给父类处理，父类处理单例
-	 * @param beanName
-	 * @return
-	 * @throws BeansException
-	 */
-	public Object getBean( String beanName ) throws BeansException{
 
-		Object singleton = this.getSingleton( beanName );
-
-		if( singleton == null ){
-			BeanDefinition beanDefinition = beanDefinitionMap.get( beanName );
-			if( beanDefinition == null ){
-				throw new BeansException( "No bean named " + beanName + " is defined" );
-			}
-
-			try{
-				singleton = Class.forName( beanDefinition.getClassName() ).newInstance();
-				this.registerSingleton( beanName, singleton );
-			}
-			catch( Exception ex ){
-				ex.printStackTrace();
-			}
-		}
-
-		return singleton;
-	}
 
 
 	@Override
