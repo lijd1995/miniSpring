@@ -9,6 +9,7 @@ public class PropertyValue{
 	private String type;
 	private String name;
 	private Object value;
+	private boolean isRef;
 
 	public PropertyValue( String name, Object value ){
 
@@ -16,11 +17,12 @@ public class PropertyValue{
 		this.value = value;
 	}
 
-	public PropertyValue(  String type, String name, Object value ){
+	public PropertyValue(  String type, String name, Object value, boolean isRef ){
 
 		this.value = value;
 		this.type = type;
 		this.name = name;
+		this.isRef = isRef;
 	}
 
 	public Object getValue(){
@@ -28,28 +30,19 @@ public class PropertyValue{
 		return value;
 	}
 
-	public void setValue( Object value ){
-
-		this.value = value;
-	}
-
 	public String getType(){
 
 		return type;
 	}
 
-	public void setType( String type ){
-
-		this.type = type;
-	}
 
 	public String getName(){
 
 		return name;
 	}
 
-	public void setName( String name ){
+	public boolean getIsRef(){
 
-		this.name = name;
+		return isRef;
 	}
 }

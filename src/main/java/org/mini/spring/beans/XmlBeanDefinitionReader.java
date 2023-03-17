@@ -3,6 +3,7 @@ package org.mini.spring.beans;
 import org.dom4j.Element;
 import org.mini.spring.core.Resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +32,23 @@ public class XmlBeanDefinitionReader{
 
 			List<Element> propertyElements = element.elements( "property" );
 			PropertyValues propertyValues = new PropertyValues();
+			List<String> refs = new ArrayList<>();
 			for( Element propertyElement : propertyElements ){
 				String type = propertyElement.attributeValue( "type" );
 				String name = propertyElement.attributeValue( "name" );
 				String value = propertyElement.attributeValue( "value" );
-				PropertyValue propertyValue = new PropertyValue( type, name, value );
+				String ref = propertyElement.attributeValue( "ref" );
+				String pv = "";
+				boolean isRef = false;
+				if( value != null && !value.equals( "" ) ) {
+					isRef = false;
+					pv = value;
+				}else if( ref != null && !ref.equals( "" ) ){
+					isRef = true;
+					pv = ref;
+					refs.add( ref );
+				}
+				PropertyValue propertyValue = new PropertyValue( type, name, pv, isRef );
 				propertyValues.addPropertyValue( propertyValue );
 			}
 			beanDefinition.setPropertyValues( propertyValues );

@@ -75,6 +75,15 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 			ex.printStackTrace();
 		}
 
+		handleProperties( beanDefinition, clz, obj );
+
+		return obj;
+
+	}
+
+	private void handleProperties( BeanDefinition beanDefinition, Class<?> clz, Object obj ){
+
+		System.out.println("handle properties for bean : " + beanDefinition.getId());
 		PropertyValues propertyValues = beanDefinition.getPropertyValues();
 		if( !propertyValues.isEmpty() ){
 			for( int i = 0; i < propertyValues.size(); i++ ) {
@@ -82,22 +91,36 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 				String type = propertyValue.getType();
 				String name = propertyValue.getName();
 				Object value = propertyValue.getValue();
+				boolean isRef = propertyValue.getIsRef();
 				Class<?>[] paramTypes = new Class<?>[ 1 ];
-				if ("String".equals(type) || "java.lang.String".equals(type)) {
-					paramTypes[0] = String.class;
-				}
-				else if ("Integer".equals(type) || "java.lang.Integer".equals(type)) {
-					paramTypes[0] = Integer.class;
-				}
-				else if ("int".equals(type)) {
-					paramTypes[0] = int.class;
-				}
-				else {
-					paramTypes[0] = String.class;
-				}
+				Object[] paramValues = new Object[ 1 ];
 
-				Object[] paramValues = new Object[1];
-				paramValues[0] = value;
+				if( !isRef ) {
+					if ("String".equals(type) || "java.lang.String".equals(type)) {
+						paramTypes[0] = String.class;
+					}
+					else if ("Integer".equals(type) || "java.lang.Integer".equals(type)) {
+						paramTypes[0] = Integer.class;
+					}
+					else if ("int".equals(type)) {
+						paramTypes[0] = int.class;
+					}
+					else {
+						paramTypes[0] = String.class;
+					}
+
+					paramValues[0] = value;
+				}else {
+					try{
+						paramTypes[0] = Class.forName( type );
+						// 调用 getBean 创建 ref 的 bean 实例
+						paramValues[0] = getBean( (String)value );
+					}
+					catch( ClassNotFoundException | BeansException e ){
+						e.printStackTrace();
+					}
+
+				}
 
 				String methodName = "set" + name.substring( 0, 1 ).toUpperCase() + name.substring( 1 );
 				Method method = null;
@@ -111,11 +134,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 				}
 			}
 		}
-
-		return obj;
-
 	}
-
 
 	/**
 	 * 根据 beanName 获取 Bean，改造后交给父类处理，父类处理单例
