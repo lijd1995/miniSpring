@@ -99,3 +99,7 @@ getBean() -> createBean() -> doCreateBean()
 getBean() 方法是对外暴露的方法，用于获取 Bean，该方法会先从毛坯中 earlySingletonObjects 中获取 Bean，如果没有的话，调用 createBean() 方法创建 Bean。
 createBean() 方法会调用 doCreateBean() 方法来进行 Bean 的创建，然后放入到 earlySingletonObjects 毛坯中，调用 handleProperties 方法将属性给补齐。
 doCreateBean() 方法会进行 Bean 的创建，主要是调用构造器来创建毛坯实例。
+
+这里面还需要学习一点，关于反射如何使用的，比如如何创建构造器、如何注入属性等。
+
+## 4. 增强IoC容器：如何让我们的Spring支持注解
