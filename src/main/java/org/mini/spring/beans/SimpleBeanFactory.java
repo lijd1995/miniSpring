@@ -1,6 +1,5 @@
 package org.mini.spring.beans;
 
-import com.sun.tools.javac.code.Attribute;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

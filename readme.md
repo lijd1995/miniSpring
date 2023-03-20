@@ -43,6 +43,7 @@ ApplicationEvent 继承了 Java 工具包内的 EventObject，在 Java 的事件
 
 目前没有任何实现，但为我们后续使用观察者模式解耦代码提供了入口。
 
+
 #### 3. 为 Bean 注入属性做一些铺垫
 
 Spring 有三种属性注入点方式：Field 注入、Setter 注入和构造器（Constructor）注入。
@@ -88,4 +89,13 @@ Setter 注入是通过 <property> 标签、构造器注入是通过 <constructor
 没有必要去理解三级缓存，因为三级缓存不是必要条件，明白这个道理就好。
 就像我一个数组也可以处理，两个数组也可以处理，只需要知道就好。
 
+在 XmlBeanDefinitionReader 中对构造器的 <constructor-arg> 和 <property> 标签进行解析放入到 BeanDefinition 中
 
+在 SimpleBeanFactory 中对 BeanDefinition 进行处理，通过对 ArgumentValues 和 PropertyValues 解析将构造器注入和 Setter 注入的属性进行注入。
+
+为了解决循环依赖，将创建bean分为三步：
+getBean() -> createBean() -> doCreateBean()
+
+getBean() 方法是对外暴露的方法，用于获取 Bean，该方法会先从毛坯中 earlySingletonObjects 中获取 Bean，如果没有的话，调用 createBean() 方法创建 Bean。
+createBean() 方法会调用 doCreateBean() 方法来进行 Bean 的创建，然后放入到 earlySingletonObjects 毛坯中，调用 handleProperties 方法将属性给补齐。
+doCreateBean() 方法会进行 Bean 的创建，主要是调用构造器来创建毛坯实例。
