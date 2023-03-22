@@ -1,61 +1,18 @@
 package org.mini.spring.beans.factory.config;
 
 import org.mini.spring.beans.BeansException;
-import org.mini.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import org.mini.spring.beans.factory.support.AbstractBeanFactory;
+import org.mini.spring.beans.factory.BeanFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface AutowireCapableBeanFactory extends BeanFactory {
 
-public class AutowireCapableBeanFactory extends AbstractBeanFactory {
+    int AUTOWIRE_NO = 0;
+    int AUTOWIRE_BY_NAME = 1;
+    int AUTOWIRE_BY_TYPE = 2;
 
-    private final List<AutowiredAnnotationBeanPostProcessor> beanPostProcessors = new ArrayList<>();
+    Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName)
+            throws BeansException;
 
+    Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
+        throws BeansException;
 
-    public void addBeanPostProcessor( AutowiredAnnotationBeanPostProcessor beanPostProcessor ) {
-        this.beanPostProcessors.remove( beanPostProcessor );
-        this.beanPostProcessors.add( beanPostProcessor );
-    }
-
-    public int getBeanPostProcessorCount() {
-        return this.beanPostProcessors.size();
-    }
-
-    public List<AutowiredAnnotationBeanPostProcessor> getBeanPostProcessors() {
-        return this.beanPostProcessors;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException {
-
-        Object result = existingBean;
-
-        // 所以这块是可以扩展的，我的 BeanPostProcessor 是可以有多个的
-        for (AutowiredAnnotationBeanPostProcessor beanProcessor : getBeanPostProcessors()) {
-
-            beanProcessor.setBeanFactory(this);
-            result = beanProcessor.postProcessBeforeInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-
-
-        return result;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException {
-
-        Object result = existingBean;
-
-        for (AutowiredAnnotationBeanPostProcessor beanProcessor : getBeanPostProcessors()) {
-            result = beanProcessor.postProcessAfterInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-
-        return null;
-    }
 }
