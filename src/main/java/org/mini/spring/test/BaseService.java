@@ -1,11 +1,14 @@
 package org.mini.spring.test;
 
+import org.mini.spring.beans.factory.annotation.Autowired;
+
 /**
  * @Author lijunda
  * @Date 2023/3/17
  */
 public class BaseService{
 
+	@Autowired
 	private BaseBaseService bbs;
 
 	public void sayHello(){

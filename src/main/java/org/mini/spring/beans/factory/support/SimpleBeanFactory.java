@@ -1,5 +1,11 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.support;
 
+
+import org.mini.spring.beans.*;
+import org.mini.spring.beans.factory.BeanFactory;
+import org.mini.spring.beans.factory.config.ConstructorArgumentValue;
+import org.mini.spring.beans.factory.config.ConstructorArgumentValues;
+import org.mini.spring.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -54,6 +60,12 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 				BeanDefinition beanDefinition = beanDefinitionMap.get( beanName );
 				singleton = createBean( beanDefinition );
 				this.registerSingleton( beanName, singleton );
+
+				// 预留beanpostprocessor位置
+				// step 1: postProcessBeforeInitialization 初始化前对Bean的处理
+				// step 2: afterPropertiesSet
+				// step 3: init-method 初始化中对Bean的处理
+				// step 4: postProcessAfterInitialization 初始化后对Bean进行处理
 			}
 
 		}
@@ -90,14 +102,14 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 		try{
 			clz = Class.forName( beanDefinition.getClassName() );
 			// 处理构造器参数
-			ArgumentValues constructorArgumentValues = beanDefinition.getConstructorArgumentValues();
+			ConstructorArgumentValues constructorArgumentValues = beanDefinition.getConstructorArgumentValues();
 			// 如果有参数
 			if( null != constructorArgumentValues && !constructorArgumentValues.isEmpty() ) {
 				Class<?>[] paramTypes = new Class<?>[ constructorArgumentValues.getArgumentCount() ];
 				Object[] paramValues = new Object[ constructorArgumentValues.getArgumentCount() ];
 				// 对每一个参数，分数据类型分别处理
 				for( int i = 0; i < constructorArgumentValues.getArgumentCount(); i++ ){
-					ArgumentValue argumentValue = constructorArgumentValues.getIndexArgumentValue( i );
+					ConstructorArgumentValue argumentValue = constructorArgumentValues.getIndexArgumentValue( i );
 					if ("String".equals(argumentValue.getType()) || "java.lang.String".equals(argumentValue.getType())) {
 						paramTypes[i] = String.class;
 						paramValues[i] = argumentValue.getValue();

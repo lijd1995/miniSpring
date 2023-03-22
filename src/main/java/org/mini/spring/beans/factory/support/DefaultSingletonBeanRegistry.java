@@ -1,4 +1,6 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.support;
+
+import org.mini.spring.beans.factory.config.SingletonBeanRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author lijunda
  * @Date 2023/3/17
  */
-public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry{
+public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
 	// 保存所有 bean 名称的列表
 	protected List<String> beanNames = new ArrayList<>();

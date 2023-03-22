@@ -103,3 +103,24 @@ doCreateBean() 方法会进行 Bean 的创建，主要是调用构造器来创�
 这里面还需要学习一点，关于反射如何使用的，比如如何创建构造器、如何注入属性等。
 
 ## 4. 增强IoC容器：如何让我们的Spring支持注解
+
+我们经常使用 @Autowired 注解进行 Bean 的注入，那什么时候进行注入的呢，我们猜测一下：
+
+1.通过 refresh 方法对所有的 Bean 进行创建，那 Bean 的注入肯定是创建 Bean 之后来完成的。
+
+2.我们定义了一个 BeanPostProcessor 接口，对 Bean 进行处理操作。那实现这个接口，就可以进行 Bean 的处理。
+
+3.实现这个接口，里面如果想要获取 Bean，就需要定义一个 BeanFactory 变量，可以传入进来之后获取 Bean。
+
+4.我们修改 refresh 方法，先将 BeanPostProcessor 注入进来，然后创建 Bean 的时候对 BeanPostProcessor 进行遍历。
+这个时候会调用 AutowiredBeanPostProcessor 进行 Bean 后置处理。
+
+5.Autowired 的处理过程如下：
+- 定义Autowired注解
+- 定义AutowiredAnnotationBeanPostProcessor类，实现BeanPostProcessor接口，对 Autowired 注解进行处理
+- 处理的时候，需要通过BeanFactory 来获取 Bean，就需要定义一个 AutowiredCapableBeanFactory 接口，用于获取 Bean
+- 但 AutowiredCapableBeanFactory 接口和之前的 SimpleBeanFactory 接口有重复逻辑，所以抽象一个 AbstractBeanFactory 类，里面实现通用逻辑，也就是模板方法。 
+- AutowiredCapableBeanFactory 继承 AbstractBeanFactory 接口，实现里面的抽象方法包括：applyBeanPostProcessorsAfterInitialization 和 applyBeanPostProcessorsBeforeInitialization
+- 在 applyBeanPostProcessorsAfterInitialization 抽象方法中，遍历 beanPostProcessor，然后将 this 作为 BeanFactory 注入进去，之后调用 postProcessAfterInitialization 方法，对 Bean 进行处理。
+- 那 beanPostProcessor 从哪里来的呢，需要在 refresh 方法之前，完成 beanPostProcessor 的注册。
+- 所以整个流程就是 ： 注册 beanPostProcessor -》

@@ -1,9 +1,12 @@
 package org.mini.spring.context;
 
-import org.mini.spring.beans.BeanFactory;
+import org.mini.spring.beans.factory.BeanFactory;
 import org.mini.spring.beans.BeansException;
-import org.mini.spring.beans.SimpleBeanFactory;
-import org.mini.spring.beans.XmlBeanDefinitionReader;
+import org.mini.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
+import org.mini.spring.beans.factory.config.AutowireCapableBeanFactory;
+import org.mini.spring.beans.factory.support.AbstractBeanFactory;
+import org.mini.spring.beans.factory.support.SimpleBeanFactory;
+import org.mini.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import org.mini.spring.core.ClassPathXmlResource;
 import org.mini.spring.core.Resource;
 
@@ -19,7 +22,7 @@ import org.mini.spring.core.Resource;
 
 public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher{
 
-	SimpleBeanFactory beanFactory;
+	AutowireCapableBeanFactory beanFactory;
 
 	public ClassPathXmlApplicationContext( String fileName ){
 		this( fileName, true );
@@ -28,13 +31,31 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
 	public ClassPathXmlApplicationContext( String fileName, boolean isRefresh ){
 
 		Resource resource = new ClassPathXmlResource( fileName );
-		SimpleBeanFactory beanFactory = new SimpleBeanFactory();
+		AutowireCapableBeanFactory beanFactory = new AutowireCapableBeanFactory();
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader( beanFactory );
 		reader.loadBeanDefinitions( resource );
 		this.beanFactory = beanFactory;
-		if( !isRefresh ) {
-			this.beanFactory.refresh();
+		if( isRefresh ) {
+			refresh();
 		}
+	}
+
+	/**
+	 * 新的 refresh() 方法，先注册 BeanPostProcessor，这样 BeanFactory 里面就有解释注解的处理器的
+	 * 后续再 getBean 的过程中就可以使用了。
+	 */
+	public void refresh(){
+
+		registerBeanPostProcessors( this.beanFactory );
+		onRefresh();
+	}
+
+	private void registerBeanPostProcessors( AutowireCapableBeanFactory beanFactory ) {
+		beanFactory.addBeanPostProcessor( new AutowiredAnnotationBeanPostProcessor() );
+	}
+
+	private void onRefresh() {
+		this.beanFactory.refresh();
 	}
 
 	@Override

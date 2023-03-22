@@ -1,4 +1,6 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory;
+
+import org.mini.spring.beans.BeansException;
 
 /**
  * BeanFactory 是对 Bean 进行管理的工厂，接口中包含对 Bean 处理最基本的两个特性：

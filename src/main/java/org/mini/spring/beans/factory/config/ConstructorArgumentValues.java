@@ -1,29 +1,26 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.config;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 对外提供增加、获取、判断等操作方法
  * @Author lijunda
  * @Date 2023/3/17
  */
-public class ArgumentValues{
+public class ConstructorArgumentValues {
 
-	private final List<ArgumentValue> argumentValueList = new ArrayList<ArgumentValue>();
+	private final List<ConstructorArgumentValue> argumentValueList = new ArrayList<ConstructorArgumentValue>();
 
-	public ArgumentValues(){
+	public ConstructorArgumentValues(){
 
 	}
 
-	public void addArgumentValue( ArgumentValue newValue){
+	public void addArgumentValue( ConstructorArgumentValue newValue){
 		this.argumentValueList.add(newValue);
 	}
 
-	public ArgumentValue getIndexArgumentValue( int index ){
+	public ConstructorArgumentValue getIndexArgumentValue(int index ){
 		return this.argumentValueList.get( index );
 	}
 

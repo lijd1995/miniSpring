@@ -1,6 +1,12 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.xml;
 
 import org.dom4j.Element;
+import org.mini.spring.beans.*;
+import org.mini.spring.beans.factory.config.ConstructorArgumentValue;
+import org.mini.spring.beans.factory.config.ConstructorArgumentValues;
+import org.mini.spring.beans.factory.config.BeanDefinition;
+import org.mini.spring.beans.factory.support.AbstractBeanFactory;
+import org.mini.spring.beans.factory.support.SimpleBeanFactory;
 import org.mini.spring.core.Resource;
 
 import java.util.ArrayList;
@@ -13,9 +19,9 @@ import java.util.List;
  */
 public class XmlBeanDefinitionReader{
 
-	SimpleBeanFactory simpleBeanFactory;
+	AbstractBeanFactory simpleBeanFactory;
 
-	public XmlBeanDefinitionReader( SimpleBeanFactory simpleBeanFactory ) {
+	public XmlBeanDefinitionReader( AbstractBeanFactory simpleBeanFactory ) {
 		this.simpleBeanFactory = simpleBeanFactory;
 	}
 
@@ -54,12 +60,12 @@ public class XmlBeanDefinitionReader{
 			beanDefinition.setPropertyValues( propertyValues );
 
 			List<Element> contructorElements  = element.elements( "constructor-arg" );
-			ArgumentValues argumentValues = new ArgumentValues();
+			ConstructorArgumentValues argumentValues = new ConstructorArgumentValues();
 			for( Element contructorElement : contructorElements ){
 				String type = contructorElement.attributeValue( "type" );
 				String name = contructorElement.attributeValue( "name" );
 				String value = contructorElement.attributeValue( "value" );
-				ArgumentValue argumentValue = new ArgumentValue( type, name, value );
+				ConstructorArgumentValue argumentValue = new ConstructorArgumentValue( type, name, value );
 				argumentValues.addArgumentValue( argumentValue );
 			}
 			beanDefinition.setPropertyValues( propertyValues );

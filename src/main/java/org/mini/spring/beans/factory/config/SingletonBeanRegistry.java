@@ -1,4 +1,4 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.config;
 
 /**
  * 单例 Bean 注册表接口类

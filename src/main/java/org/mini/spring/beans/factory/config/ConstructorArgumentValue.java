@@ -1,23 +1,23 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.config;
 
 /**
  * <constructor-args> 标签内容
  * @Author lijunda
  * @Date 2023/3/17
  */
-public class ArgumentValue{
+public class ConstructorArgumentValue {
 
 	private String type;
 	private String name;
 	private Object value;
 
-	public ArgumentValue( Object value, String type ){
+	public ConstructorArgumentValue(Object value, String type ){
 
 		this.value = value;
 		this.type = type;
 	}
 
-	public ArgumentValue(  String type, String name, Object value ){
+	public ConstructorArgumentValue(String type, String name, Object value ){
 
 		this.value = value;
 		this.type = type;

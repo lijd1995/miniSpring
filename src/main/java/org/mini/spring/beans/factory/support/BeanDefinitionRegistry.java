@@ -1,4 +1,6 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.support;
+
+import org.mini.spring.beans.factory.config.BeanDefinition;
 
 /**
  * BeanDefinition 仓库

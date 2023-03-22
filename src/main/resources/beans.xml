@@ -9,10 +9,10 @@
     </bean>
 
     <bean id = "baseservice" class = "org.mini.spring.test.BaseService">
-        <property type = "org.mini.spring.test.BaseBaseService" name = "bbs" ref = "basebaseservice" />
+<!--        <property type = "org.mini.spring.test.BaseBaseService" name = "bbs" ref = "basebaseservice" />-->
     </bean>
 
-    <bean id = "basebaseservice" class = "org.mini.spring.test.BaseBaseService">
+    <bean id = "bbs" class = "org.mini.spring.test.BaseBaseService">
         <property type = "org.mini.spring.test.AServiceImpl" name = "as" ref = "aservice" />
     </bean>
 </beans>

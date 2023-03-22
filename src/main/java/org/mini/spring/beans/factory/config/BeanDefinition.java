@@ -1,4 +1,6 @@
-package org.mini.spring.beans;
+package org.mini.spring.beans.factory.config;
+
+import org.mini.spring.beans.PropertyValues;
 
 /**
  * 增加 Bean 的属性
@@ -12,7 +14,7 @@ public class BeanDefinition{
 	String SCOPE_PROTOTYPE = "prototype"; // 原型模式
 	private boolean lazyInit = false; // Bean 加载的时候是否要初始化
 	private String[] dependsOn; // 记录 Bean 之间的依赖关系
-	private ArgumentValues constructorArgumentValues;
+	private ConstructorArgumentValues constructorArgumentValues;
 	private PropertyValues propertyValues;
 	private String initMethodName; // 初始化的声明方法
 	private volatile Object beanClass;
@@ -66,12 +68,12 @@ public class BeanDefinition{
 		this.dependsOn = dependsOn;
 	}
 
-	public ArgumentValues getConstructorArgumentValues(){
+	public ConstructorArgumentValues getConstructorArgumentValues(){
 
 		return constructorArgumentValues;
 	}
 
-	public void setConstructorArgumentValues( ArgumentValues constructorArgumentValues ){
+	public void setConstructorArgumentValues( ConstructorArgumentValues constructorArgumentValues ){
 
 		this.constructorArgumentValues = constructorArgumentValues;
 	}
