@@ -104,23 +104,64 @@ doCreateBean() 方法会进行 Bean 的创建，主要是调用构造器来创�
 
 ## 4. 增强IoC容器：如何让我们的Spring支持注解
 
-我们经常使用 @Autowired 注解进行 Bean 的注入，那什么时候进行注入的呢，我们猜测一下：
+首先修改一下目录结构，将一些内容移动到 factory 文件夹下，这个跟 Spring 中的结构是对应的。
 
-1.通过 refresh 方法对所有的 Bean 进行创建，那 Bean 的注入肯定是创建 Bean 之后来完成的。
+**因此这块应该对照着 Spring 的源码去分析一下这块的内容。**
 
-2.我们定义了一个 BeanPostProcessor 接口，对 Bean 进行处理操作。那实现这个接口，就可以进行 Bean 的处理。
+```json
 
-3.实现这个接口，里面如果想要获取 Bean，就需要定义一个 BeanFactory 变量，可以传入进来之后获取 Bean。
+factory —— BeanFactory.java
+factory.xml —— XmlBeanDefinitionReader.java
+factory.support —— DefaultSingletonBeanRegistry.java、
+BeanDefinitionRegistry.java、SimpleBeanFactory.java
+factory.config —— SingletonBeanRegistry.java、ConstructorArgumentValues.java、
+ConstructorArgumentValue.java、BeanDefinition.java
 
-4.我们修改 refresh 方法，先将 BeanPostProcessor 注入进来，然后创建 Bean 的时候对 BeanPostProcessor 进行遍历。
-这个时候会调用 AutowiredBeanPostProcessor 进行 Bean 后置处理。
+// 注：
+// ConstructorArgumentValues由ArgumentValues改名而来
+// ConstructorArgumentValue由ArgumentValue改名而来
 
-5.Autowired 的处理过程如下：
-- 定义Autowired注解
-- 定义AutowiredAnnotationBeanPostProcessor类，实现BeanPostProcessor接口，对 Autowired 注解进行处理
-- 处理的时候，需要通过BeanFactory 来获取 Bean，就需要定义一个 AutowiredCapableBeanFactory 接口，用于获取 Bean
-- 但 AutowiredCapableBeanFactory 接口和之前的 SimpleBeanFactory 接口有重复逻辑，所以抽象一个 AbstractBeanFactory 类，里面实现通用逻辑，也就是模板方法。 
-- AutowiredCapableBeanFactory 继承 AbstractBeanFactory 接口，实现里面的抽象方法包括：applyBeanPostProcessorsAfterInitialization 和 applyBeanPostProcessorsBeforeInitialization
-- 在 applyBeanPostProcessorsAfterInitialization 抽象方法中，遍历 beanPostProcessor，然后将 this 作为 BeanFactory 注入进去，之后调用 postProcessAfterInitialization 方法，对 Bean 进行处理。
-- 那 beanPostProcessor 从哪里来的呢，需要在 refresh 方法之前，完成 beanPostProcessor 的注册。
-- 所以整个流程就是 ： 注册 beanPostProcessor -》
+```
+
+Autowired 的处理过程如下：
+1. 定义Autowired注解：使用 AutoWired 的好处就是不用显式地在 XML 配置文件中使用 ref 属性指定依赖的对象。
+
+但是注解也是需要代码解释的，必须要有另外一个程序来解释它。 
+
+那我们自问一下：我们要在哪一段程序来解释这个注解呢？肯定是要有创建好的对象，就是在 createBean 方法之后, 也就是在 getBean 方法中在加上下面内容。
+
+在 createBean 之后留了几个方法，分别是 postProcessBeforeInitialization、init-method 和 postProcessAfterInitialization，这三个方法都是在 Bean 初始化之后调用的。
+
+2. 定义 BeanPostProcessor 接口，包括 postProcessBeforeInitialization 和 postProcessAfterInitialization 两个方法
+
+3. 定义AutowiredAnnotationBeanPostProcessor类实现 BeanPostProcessor 接口，对 Autowired 注解进行处理。
+   1. 获取 Bean 的所有属性，然后遍历属性，判断是否有 Autowired 注解，如果有的话，就通过 BeanFactory 来获取 Bean，然后将 Bean 注入到属性中。
+   2. 这里用到的 BeanFactory 是 AutowiredBeanFactory，专门为 Autowired 注入 Bean 准备的。
+   
+4. 我们之前有 SimpleBeanFactory，现在又需要一个 AutowiredBeanFactory，这两个接口有重复的逻辑，所以抽象一个 AbstractBeanFactory 类，里面实现通用逻辑，也就是模板方法。
+   1. 将 refresh()、getBean()、registerBeanDefinition() 等方法抽取到抽象类中。
+   2. getBean() 中是一个模板方法，里面定义了 applyBeanPostProcessorsBeforeInitialization 和 applyBeanPostProcessorsAfterInitialization 两个抽象方法。
+   
+5. AutowireCapableBeanFactory 继承了 AbstractBeanFactory，实现了里面的两个抽象方法。
+   1. 这里面涉及到 BeanPostProcessor 的概念，也就是我们在第三步定义的AutowiredAnnotationBeanPostProcessor类
+   2. 通过 addBeanPostProcessor 将 BeanPostProcessor 注册到 beanPostProcessors 中。
+   3. applyBeanPostProcessorsBeforeInitialization 方法中，遍历 beanPostProcessor，然后将 this 作为 BeanFactory 注入进去，之后调用 postProcessBeforeInitialization 方法，对 Bean 进行处理。
+   4. applyBeanPostProcessorsAfterInitialization 方法中，遍历 beanPostProcessor，然后将 this 作为 BeanFactory 注入进去，之后调用 postProcessAfterInitialization 方法，对 Bean 进行处理。
+   5. 这块不好理解，我们梳理一下（先将Processor注入到BeanFactory中，使用Processor的时候又将BeanFactory作为this注入到Processor中，而这种解耦是通过接口来实现的）
+
+6. 调整 ClassPathXmlApplicationContext，之前是 SimpleBeanFactory，现在改为 AutowireCapableBeanFactory。
+
+7. 在 ClassPathXmlApplicationContext 中，调用 refresh() 方法。
+   1. 里面先调用了 registerBeanPostProcessors() 方法，将 BeanPostProcessor 注册到 BeanFactory 的 beanPostProcessors 中。
+   2. 调用 BeanFactory 的 refresh 方法，进行实体的构建流程。
+   
+总结一下，相较于之前来说，我们想要对 Autowired 进行处理，需要在创建完 Bean 之后调用 applyBeanPostProcessorsBeforeInitialization 和 applyBeanPostProcessorsAfterInitialization 方法，这两个方法中会调用 BeanPostProcessor 的 postProcessBeforeInitialization 和 postProcessAfterInitialization 方法，
+这两个方法中会调用 AutowiredAnnotationBeanPostProcessor 的 postProcessBeforeInitialization 和 postProcessAfterInitialization 方法，这两个方法中会调用 AutowiredAnnotationBeanPostProcessor 的 processInjection 方法。
+
+AutowiredAnnotationBeanPostProcessor 中肯定也需要用到 BeanFactory 进行对象的创建，这个时候需要创建一个对应的 BeanFactory，就是 AutowireCapableBeanFactory。
+
+AutowireCapableBeanFactory 和 SimpleBeanFactory 有类似的结构，就将相同的逻辑也抽象出来，一个 AbstractBeanFactory。这个抽象类定义了两个抽象方法，也就是 applyBeanPostProcessorsBeforeInitialization 和 applyBeanPostProcessorsAfterInitialization 方法
+
+这两个抽象方法需要交给 AutowireCapableBeanFactory 来实现，然后实现肯定要用到 BeanProcessor，所以需要有一个列表来保存。
+
+Spring 巧妙之处就在于通过接口进行解耦，也通过接口进行扩展，留出一个列表，可以循环遍历接口进行操作。
