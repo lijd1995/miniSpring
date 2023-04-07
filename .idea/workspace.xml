@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4b2427dd-4de7-4876-aa05-d476797ee921" name="Changes" comment="feature：增加扩展 BeanFactory 并且增加 ApplicationContext 和 ApplicationEvent 事件发布机制" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="ioc5" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="$PROJECT_DIR$/../../tools/apache-maven-3.8.3/repository" />
+        <option name="userSettingsFile" value="$PROJECT_DIR$/../../tools/apache-maven-3.8.3/conf/settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2N4qarFpQjJVsUwggbPseVHndLj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showExcludedFiles" value="false" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.uml" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.chatgpt.mini.spring" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Test1">
+    <configuration name="MiniSpringTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.chatgpt.mini.spring.chatgpt.MiniSpringTest" />
+      <module name="miniSpring" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.chatgpt.mini.spring.chatgpt.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test1" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.mini.spring.test.Test1" />
+      <module name="miniSpring" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.mini.spring.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Test1" />
+        <item itemvalue="Application.MiniSpringTest" />
+        <item itemvalue="Application.Test1" />
+        <item itemvalue="Application.MiniSpringTest" />
+        <item itemvalue="Application.Test1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4b2427dd-4de7-4876-aa05-d476797ee921" name="Changes" comment="" />
+      <created>1678933768933</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1678933768933</updated>
+      <workItem from="1678933770799" duration="8105000" />
+      <workItem from="1679020790402" duration="20446000" />
+      <workItem from="1679384031855" duration="2603000" />
+      <workItem from="1679644870281" duration="1202000" />
+      <workItem from="1680082786700" duration="1998000" />
+      <workItem from="1680087456746" duration="2485000" />
+      <workItem from="1680519135949" duration="1918000" />
+      <workItem from="1680596061193" duration="18267000" />
+      <workItem from="1680856044488" duration="1079000" />
+    </task>
+    <task id="LOCAL-00001" summary="refactor：对丐版IoC的功能进行构成&#10;1.抽取出两个接口：BeanFactory 和 Resource 分别对 Bean 和资源的管理，通过接口进行可扩展的实现。&#10;2.分别定义SimplebeanFactory和ClassPathXmlResource实现上面两个接口&#10;3.通过 XmlBeanDefinitionReader 可以将 resource 与 beanfactory 进行转换&#10;4.对 ClassPathXmlApplicationContext 进行重构">
+      <created>1678962420348</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678962420348</updated>
+    </task>
+    <task id="LOCAL-00002" summary="docs：增加对 ApplicationContext 的描述信息">
+      <created>1678963349523</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1678963349523</updated>
+    </task>
+    <task id="LOCAL-00003" summary="docs：增加文档开发细节描述部分，对应着极客时间专栏">
+      <created>1678964291923</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1678964291923</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feature：增加单例功能、并且将BeanFactory和BeanDefinition进行拆分">
+      <created>1679042435646</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1679042435646</updated>
+    </task>
+    <task id="LOCAL-00005" summary="optimize：去掉 ArgumentValues 的无用代码">
+      <created>1679051108057</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1679051108057</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feature：解析&lt;property&gt;和&lt;contructor-arg&gt;两个标签">
+      <created>1679051516621</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1679051516621</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feature：对BeanDefinition的构造器和Setter进行注入处理操作">
+      <created>1679053340923</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1679053340923</updated>
+    </task>
+    <task id="LOCAL-00008" summary="feature：对方法中的实体可以进行注入">
+      <created>1679057384157</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679057384157</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feature：解决循环依赖问题">
+      <created>1679060685583</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1679060685583</updated>
+    </task>
+    <task id="LOCAL-00010" summary="doc：增加Autowired处理流程的文档">
+      <created>1680521049501</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1680521049501</updated>
+    </task>
+    <task id="LOCAL-00011" summary="feature：增加扩展 BeanFactory 并且增加 ApplicationContext 和 ApplicationEvent 事件发布机制">
+      <created>1680855863645</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1680855863645</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="5d140c4b-e7d7-46ed-9151-4f950db7a705">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="5d140c4b-e7d7-46ed-9151-4f950db7a705" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="refactor：对丐版IoC的功能进行构成&#10;1.抽取出两个接口：BeanFactory 和 Resource 分别对 Bean 和资源的管理，通过接口进行可扩展的实现。&#10;2.分别定义SimplebeanFactory和ClassPathXmlResource实现上面两个接口&#10;3.通过 XmlBeanDefinitionReader 可以将 resource 与 beanfactory 进行转换&#10;4.对 ClassPathXmlApplicationContext 进行重构" />
+    <MESSAGE value="docs：增加对 ApplicationContext 的描述信息" />
+    <MESSAGE value="docs：增加文档开发细节描述部分，对应着极客时间专栏" />
+    <MESSAGE value="feature：增加单例功能、并且将BeanFactory和BeanDefinition进行拆分" />
+    <MESSAGE value="optimize：去掉 ArgumentValues 的无用代码" />
+    <MESSAGE value="feature：解析&lt;property&gt;和&lt;contructor-arg&gt;两个标签" />
+    <MESSAGE value="feature：对BeanDefinition的构造器和Setter进行注入处理操作" />
+    <MESSAGE value="feature：对方法中的实体可以进行注入" />
+    <MESSAGE value="feature：解决循环依赖问题" />
+    <MESSAGE value="doc：增加Autowired处理流程的文档" />
+    <MESSAGE value="feature：增加扩展 BeanFactory 并且增加 ApplicationContext 和 ApplicationEvent 事件发布机制" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature：增加扩展 BeanFactory 并且增加 ApplicationContext 和 ApplicationEvent 事件发布机制" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
