@@ -5,7 +5,12 @@ import org.mini.spring.beans.BeansException;
 import java.util.Map;
 
 /**
- * 对bean工厂的扩展，提供一些Bean的特性
+ * 对BeanFactory的扩展，提供一些Bean的特性
+ *
+ * 为啥要有这样的一个 BeanFactory 接口呢？
+ *
+ * 可以将 Factory 内部管理的 Bean 作为一个集合来对待，那需要提供一个能力对 Bean 的集合进行处理
+ *
  */
 public interface ListableBeanFactory extends BeanFactory {
 

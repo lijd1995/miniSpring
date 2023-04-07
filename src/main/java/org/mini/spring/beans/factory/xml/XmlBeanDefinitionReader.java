@@ -69,8 +69,10 @@ public class XmlBeanDefinitionReader{
 				argumentValues.addArgumentValue( argumentValue );
 			}
 			beanDefinition.setPropertyValues( propertyValues );
+			String[] refArrau = refs.toArray( new String[0] );
+			beanDefinition.setDependsOn( refArrau );
 
-			this.simpleBeanFactory.registerBeanDefinition( beanDefinition );
+			this.simpleBeanFactory.registerBeanDefinition( beanID, beanDefinition );
 		}
 	}
 

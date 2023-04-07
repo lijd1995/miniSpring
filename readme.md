@@ -165,3 +165,62 @@ AutowireCapableBeanFactory 和 SimpleBeanFactory 有类似的结构，就将相�
 这两个抽象方法需要交给 AutowireCapableBeanFactory 来实现，然后实现肯定要用到 BeanProcessor，所以需要有一个列表来保存。
 
 Spring 巧妙之处就在于通过接口进行解耦，也通过接口进行扩展，留出一个列表，可以循环遍历接口进行操作。
+
+## 05｜实现完整的IoC容器：构建工厂体系并添加容器事件
+
+前面 IoC 核心部分和骨架都有了，怎么让这个 IoC 丰满起来呢？
+
+需要实现更多的功能，让 IoC 更加完备。
+
+这一部分要实现一个完整的 IoC 容器，包括：
+
+1. 进一步增加扩展性，
+增加四个接口：ListableBeanFactory、ConfigurableBeanFactory、ConfigurableListableBeanFactory、EnvironmentCapable
+
+ListableBeanFactory：是将 Bean 作为一个集合，该接口提供一些方法，获取 Bean 的一些属性。比如获取 Bean 的数量，得到所有 Bean 的名字，
+按照某个类型获取 Bean 列表等。
+
+ConfigurableBeanFactory 接口：继承了 BeanFactory 和 SingletonBeanRegistry 接口。
+在该接口中维护 Bean 之间的依赖关系以及支持 BeanProcessor 的注册
+
+ConfigurableListableBeanFactory 接口：继承了 ConfigurableBeanFactory 、 ListableBeanFactory、AutowireCapableBeanFactory 接口。
+是一个接口的合并汇总
+
+上面这三个接口是给通用的 BeanFactory 和 BeanDefinition 进行扩展，增加了很多个处理方法，增强了各种特性。
+
+接口隔离原则：在 Java 语言的设计中，一个 Interface 代表的是一种特性或者能力，我们把这些特性或能力一个个抽取出来，各自独立互不干扰。如果一个具体的类，想具备某些特性或者能力，就去实现这些 interface，随意组合。
+Spring 框架中用的很多，通过接口进行隔离。增加系统的可扩展性。
+
+我们之前的 AutowireCapableBeanFactory 是一个实现类，继承了 AbstractBeanFactory。
+现在要把 AutowireCapableBeanFactory 该成接口，然后创建新的抽象类 AbstractAutowireCapableBeanFactory 代替原有的实现类。
+
+---
+
+2. 增加环境因素
+
+前面是扩充 BeanFactory 体系，我们可以给容器增加一些环境因素，使得容器整体的属性有地方存储。
+
+在 core 目录下新建 env 目录，增加 PropertyResolver.java、EnvironmentCapable.java、Environment.java 三个接口类。EnvironmentCapable 主要用于获取 Environment 实例，Environment 则继承 PropertyResoulver 接口，用于获取属性。所有的 ApplicationContext 都实现了 Environment 接口
+
+
+3. 实现 DefaultListableBeanFactory，该类是 Spring IoC 的引擎
+
+DefaultListableBeanFactory 继承了 AbstractAutowireCapableBeanFactory,并实现了 ConfigurableListableBeanFactory 接口。
+
+实现后我们看不出它怎么成为 IoC 引擎的，它成为引擎的秘诀在于它继承了其他 BeanFactory 类来实现 Bean 的创建管理能力。
+
+AbstractAutowiredCapableBeanFactory 是对 Bean 进行创建。
+ConfigurableListableBeanFactory 是增加了对 Bean 的管理能力。
+DefaultListableBeanFactory 实现了 ConfigurableListableBeanFactory 的方法，而这些方法里面用到的 Bean 是在 AbstractAutowiredCapableBeanFactory 中提供的方法。
+
+看一下 Spring 的继承架构图
+
+![](https://ljd-image-upload.oss-cn-beijing.aliyuncs.com/sources/202304041729776.png)
+
+MiniSpring 和 Spring 框架设计得几乎是一样的。这样就可以理解了 SpringIoC的核心流程。
+
+然后我们修改一下 ClassPathXmlApplicationContext，让这个启动类注入 DefaultListableBeanFactory。
+
+这样整个框架完成内部逻辑的闭环流程。
+
+5. 改造 ApplicationContext

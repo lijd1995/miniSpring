@@ -12,7 +12,7 @@ import java.util.Map;
  * Spring IoC 引擎
  */
 public class DefaultListableBeanFactory
-        extends AbstractAutowireCapableBeanFactory implements ConfigurableListBeanFactory {
+        extends AbstractAutowireCapableBeanFactory implements ConfigurableListableBeanFactory{
 
     @Override
     public int getBeanDefinitionCount() {

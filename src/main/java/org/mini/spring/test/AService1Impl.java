@@ -4,7 +4,7 @@ package org.mini.spring.test;
  * @Author lijunda
  * @Date 2023/3/16
  */
-public class AServiceImpl implements AService{
+public class AService1Impl implements AService1{
 
 	private String name;
 	private int level;
@@ -12,11 +12,11 @@ public class AServiceImpl implements AService{
 	private String property2;
 	private BaseService ref1;
 
-	public AServiceImpl(){
+	public AService1Impl(){
 
 	}
 
-	public AServiceImpl( String name, int level ){
+	public AService1Impl( String name, int level ){
 
 		this.name = name;
 		this.level = level;

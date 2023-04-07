@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans>
-    <bean id = "aservice" class = "org.mini.spring.test.AServiceImpl">
+
+
+    <bean id = "baseservice" class = "org.mini.spring.test.BaseService">
+<!--        <property type = "org.mini.spring.test.BaseBaseService" name = "bbs" ref = "basebaseservice" />-->
+    </bean>
+
+    <bean id = "aservice" class = "org.mini.spring.test.AService1Impl">
         <constructor-arg type = "String" name = "name" value = "abc" />
         <constructor-arg type = "int" name = "level" value = "3" />
         <property type = "String" name = "property1" value = "Someone says" />
@@ -8,11 +14,8 @@
         <property type="org.mini.spring.test.BaseService" name="ref1" ref="baseservice"/>
     </bean>
 
-    <bean id = "baseservice" class = "org.mini.spring.test.BaseService">
-<!--        <property type = "org.mini.spring.test.BaseBaseService" name = "bbs" ref = "basebaseservice" />-->
+    <bean id = "bbs" class = "org.mini.spring.test.BaseBaseService">
+        <property type = "org.mini.spring.test.AService1Impl" name = "as" ref = "aservice" />
     </bean>
 
-    <bean id = "bbs" class = "org.mini.spring.test.BaseBaseService">
-        <property type = "org.mini.spring.test.AServiceImpl" name = "as" ref = "aservice" />
-    </bean>
 </beans>

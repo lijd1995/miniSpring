@@ -12,9 +12,9 @@ public class Test1{
 	public static void main( String[] args ){
 
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext( "beans.xml" );
-		AService aservice = null;
+		AService1 aservice = null;
 		try{
-			aservice = ( AService )ctx.getBean( "aservice" );
+			aservice = ( AService1 )ctx.getBean( "aservice" );
 		}
 		catch( BeansException e ){
 			e.printStackTrace();

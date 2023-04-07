@@ -244,14 +244,6 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
         this.beanDefinitionMap.put( name, beanDefinition );
         this.beanDefinitionNames.add( name );
-        if( !beanDefinition.isLazyInit() ){
-            try{
-                getBean( name );
-            }
-            catch( BeansException e ){
-                e.printStackTrace();
-            }
-        }
     }
 
     /**
@@ -277,9 +269,6 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         return this.beanDefinitionMap.containsKey( name );
     }
 
-    public void registerBeanDefinition( BeanDefinition beanDefinition ) {
-        this.beanDefinitionMap.put( beanDefinition.getId(), beanDefinition );
-    }
 
     @Override
     public boolean isSingleton( String name ){

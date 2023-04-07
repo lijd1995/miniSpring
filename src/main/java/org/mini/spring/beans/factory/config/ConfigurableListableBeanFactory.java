@@ -3,7 +3,7 @@ package org.mini.spring.beans.factory.config;
 import org.mini.spring.beans.factory.ListableBeanFactory;
 
 /**
- * 用一个 ConfigurableListBeanFactory 接口把 AutowireCapableBeanFactory、ListableBeanFactory 和 ConfigurableBeanFactory 合并在一起
+ * 用一个 ConfigurableListableBeanFactory 接口把 AutowireCapableBeanFactory、ListableBeanFactory 和 ConfigurableBeanFactory 合并在一起
  *
  * 这几个接口给 BeanFactory 和 BeanDefinition 新增了众多处理方法，用来增强各种特性
  *
@@ -12,6 +12,6 @@ import org.mini.spring.beans.factory.ListableBeanFactory;
  * 这样的特性叫做接口隔离原则
  *
  */
-public interface ConfigurableListBeanFactory extends ListableBeanFactory, AutowireCapableBeanFactory, ConfigurableBeanFactory {
+public interface ConfigurableListableBeanFactory extends ListableBeanFactory, AutowireCapableBeanFactory, ConfigurableBeanFactory {
 
 }

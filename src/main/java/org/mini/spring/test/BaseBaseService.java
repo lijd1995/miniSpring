@@ -6,13 +6,13 @@ package org.mini.spring.test;
  */
 public class BaseBaseService{
 
-	private AServiceImpl as;
+	private AService1Impl as;
 
 	public BaseBaseService(){
 
 	}
 
-	public BaseBaseService( AServiceImpl as ){
+	public BaseBaseService( AService1Impl as ){
 
 		this.as = as;
 	}
@@ -22,12 +22,12 @@ public class BaseBaseService{
 		System.out.println("测试 BaseBaseService");
 	}
 
-	public AServiceImpl getAs(){
+	public AService1Impl getAs(){
 
 		return as;
 	}
 
-	public void setAs( AServiceImpl as ){
+	public void setAs( AService1Impl as ){
 
 		this.as = as;
 	}
